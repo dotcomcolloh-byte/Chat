@@ -1,0 +1,24 @@
+CREATE TABLE OutboxAction (
+    id TEXT NOT NULL PRIMARY KEY,
+    path TEXT NOT NULL,
+    method TEXT NOT NULL,
+    bodyJson TEXT,
+    createdAt INTEGER NOT NULL,
+    retryCount INTEGER NOT NULL DEFAULT 0
+);
+
+insertAction:
+INSERT INTO OutboxAction(id, path, method, bodyJson, createdAt, retryCount)
+VALUES (?, ?, ?, ?, ?, 0);
+
+selectAllOrdered:
+SELECT * FROM OutboxAction ORDER BY createdAt ASC;
+
+incrementRetry:
+UPDATE OutboxAction SET retryCount = retryCount + 1 WHERE id = ?;
+
+deleteAction:
+DELETE FROM OutboxAction WHERE id = ?;
+
+countPending:
+SELECT COUNT(*) FROM OutboxAction;

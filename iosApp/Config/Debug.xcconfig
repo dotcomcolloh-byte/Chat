@@ -1,0 +1,4 @@
+// Copy real values into this file locally — never commit real secrets.
+API_BASE_URL = https:/$()/api-staging.telefam.app
+
+GIPHY_API_KEY = your-giphy-api-key

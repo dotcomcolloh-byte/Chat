@@ -1,0 +1,193 @@
+CREATE TABLE CachedMessage (
+    id TEXT NOT NULL PRIMARY KEY,
+    peerId TEXT NOT NULL,
+    outgoing INTEGER NOT NULL, -- 1 if sent by me, 0 if received
+    contentCategory TEXT NOT NULL, -- TEXT/IMAGE/VIDEO/VOICE/FILE
+    textOrCaption TEXT,
+    mediaLocalPath TEXT,
+    mediaDurationSeconds INTEGER,
+    viewOnce INTEGER NOT NULL DEFAULT 0,
+    viewOnceOpened INTEGER NOT NULL DEFAULT 0,
+    createdAt INTEGER NOT NULL,
+    expiresAt INTEGER, -- null = never expires
+    deliveryState TEXT NOT NULL DEFAULT 'SENT', -- SENDING/SENT/DELIVERED/READ/FAILED
+    replyToId TEXT,          -- id of the message this one quotes
+    replyPreview TEXT,       -- short plain-text snippet of the quoted message (encrypted at rest like everything else in this DB)
+    replySender TEXT,        -- display name of the quoted message's author
+    editedAt INTEGER,        -- non-null once the message was edited
+    pinned INTEGER NOT NULL DEFAULT 0,
+    starred INTEGER NOT NULL DEFAULT 0,
+    deletedForEveryone INTEGER NOT NULL DEFAULT 0, -- tombstone: content wiped, row kept so ordering/threads stay consistent
+    reactions TEXT,          -- JSON object emoji -> [userIds]
+    forwarded INTEGER NOT NULL DEFAULT 0,
+    mediaRemoteId TEXT,      -- set when media travels via the dedicated encrypted-blob channel instead of inline base64
+    mediaKey TEXT            -- per-message AES-GCM key+nonce for the blob (inside the Signal-encrypted payload)
+);
+
+CREATE INDEX idx_cached_message_peer ON CachedMessage(peerId, createdAt);
+
+CREATE TABLE ChatSettingsLocal (
+    peerId TEXT NOT NULL PRIMARY KEY,
+    mutedUntil INTEGER,
+    disappearingMessagesSeconds INTEGER NOT NULL DEFAULT 0,
+    cachedTheme TEXT,
+    cachedBubbleColour TEXT,
+    cachedPeerScreenshotPolicy TEXT NOT NULL DEFAULT 'ANYONE',
+    cachedPeerSharePolicy TEXT NOT NULL DEFAULT 'ANYONE',
+    cachedPeerCopyPolicy TEXT NOT NULL DEFAULT 'ANYONE',
+    cachedPeerDownloadPolicy TEXT NOT NULL DEFAULT 'ANYONE',
+    updatedAt INTEGER NOT NULL
+);
+
+CREATE TABLE PeerCache (
+    peerId TEXT NOT NULL PRIMARY KEY,
+    displayName TEXT NOT NULL,
+    username TEXT,
+    lastOpenedAt INTEGER NOT NULL DEFAULT 0,
+    -- Backend-granted verification badge snapshot (refreshed from the server; display-only).
+    isVerified INTEGER NOT NULL DEFAULT 0
+);
+
+upsertPeer:
+INSERT INTO PeerCache(peerId, displayName, username, lastOpenedAt) VALUES (?, ?, ?, ?)
+ON CONFLICT(peerId) DO UPDATE SET displayName = excluded.displayName, username = excluded.username;
+
+setPeerVerified:
+UPDATE PeerCache SET isVerified = ? WHERE peerId = ?;
+
+selectPeer:
+SELECT * FROM PeerCache WHERE peerId = ?;
+
+selectConversations:
+SELECT p.peerId AS peerId, p.displayName AS displayName, p.isVerified AS isVerified, m.contentCategory AS lastCategory,
+       m.textOrCaption AS lastText, m.createdAt AS lastAt, m.outgoing AS lastOutgoing, m.viewOnce AS lastViewOnce,
+       (SELECT COUNT(*) FROM CachedMessage u
+        WHERE u.peerId = p.peerId AND u.outgoing = 0 AND u.deliveryState != 'READ'
+          AND u.deletedForEveryone = 0 AND u.contentCategory NOT IN ('CONTROL_OUT', 'POLL_VOTE_OUT', 'FLAG')) AS unreadCount
+FROM PeerCache p
+LEFT JOIN CachedMessage m ON m.id = (
+    SELECT id FROM CachedMessage
+    WHERE peerId = p.peerId AND contentCategory NOT IN ('CONTROL_OUT', 'POLL_VOTE_OUT', 'FLAG')
+    ORDER BY createdAt DESC LIMIT 1
+)
+ORDER BY COALESCE(m.createdAt, p.lastOpenedAt) DESC;
+
+selectPendingOutgoing:
+SELECT * FROM CachedMessage WHERE outgoing = 1 AND deliveryState = 'SENDING' ORDER BY createdAt ASC;
+
+selectById:
+SELECT * FROM CachedMessage WHERE id = ?;
+
+consumeViewOnce:
+UPDATE CachedMessage SET viewOnceOpened = 1, textOrCaption = NULL, mediaLocalPath = NULL WHERE id = ?;
+
+updatePayloadText:
+UPDATE CachedMessage SET textOrCaption = ? WHERE id = ?;
+
+insertMessage:
+INSERT OR REPLACE INTO CachedMessage(id, peerId, outgoing, contentCategory, textOrCaption, mediaLocalPath, mediaDurationSeconds, viewOnce, viewOnceOpened, createdAt, expiresAt, deliveryState, replyToId, replyPreview, replySender, editedAt, pinned, starred, deletedForEveryone, reactions, forwarded, mediaRemoteId, mediaKey)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateDeliveryState:
+UPDATE CachedMessage SET deliveryState = ? WHERE id = ?;
+
+markViewOnceOpened:
+UPDATE CachedMessage SET viewOnceOpened = 1 WHERE id = ?;
+
+selectPage:
+SELECT * FROM CachedMessage WHERE peerId = ? AND createdAt < ? ORDER BY createdAt DESC LIMIT ?;
+
+selectExpired:
+SELECT * FROM CachedMessage WHERE expiresAt IS NOT NULL AND expiresAt <= ?;
+
+deleteMessage:
+DELETE FROM CachedMessage WHERE id = ?;
+
+setEdited:
+UPDATE CachedMessage SET textOrCaption = ?, editedAt = ? WHERE id = ?;
+
+setPinned:
+UPDATE CachedMessage SET pinned = ? WHERE id = ?;
+
+setStarred:
+UPDATE CachedMessage SET starred = ? WHERE id = ?;
+
+setReactions:
+UPDATE CachedMessage SET reactions = ? WHERE id = ?;
+
+markDeletedForEveryone:
+UPDATE CachedMessage SET deletedForEveryone = 1, textOrCaption = NULL, mediaLocalPath = NULL, reactions = NULL, replyToId = NULL, replyPreview = NULL, replySender = NULL WHERE id = ?;
+
+updateMediaLocalPath:
+UPDATE CachedMessage SET mediaLocalPath = ? WHERE id = ?;
+
+-- Fast path for ASCII queries: SQLite LIKE is case-insensitive for ASCII only. The query is escaped by the caller
+-- (the backslash, % and _ are each prefixed with a backslash) so user text is always literal. View-once rows are never searchable.
+searchMessages:
+SELECT * FROM CachedMessage
+WHERE peerId = :peerId AND deletedForEveryone = 0 AND viewOnce = 0 AND textOrCaption IS NOT NULL
+  AND contentCategory NOT IN ('CONTROL_OUT', 'POLL_VOTE_OUT', 'FLAG')
+  AND textOrCaption LIKE '%' || :query || '%' ESCAPE '\'
+ORDER BY createdAt DESC, id DESC LIMIT :limit;
+
+-- Full-history scan used for non-ASCII queries (Unicode case-folding is done in Kotlin, SQLite cannot do it).
+selectSearchablePage:
+SELECT * FROM CachedMessage
+WHERE peerId = :peerId AND deletedForEveryone = 0 AND viewOnce = 0 AND textOrCaption IS NOT NULL
+  AND contentCategory NOT IN ('CONTROL_OUT', 'POLL_VOTE_OUT', 'FLAG')
+ORDER BY createdAt DESC, id DESC LIMIT :pageSize OFFSET :offset;
+
+-- Everything from a given message up to the newest one: lets the chat window grow until an old search hit is loaded.
+selectSince:
+SELECT * FROM CachedMessage WHERE peerId = ? AND createdAt >= ? ORDER BY createdAt DESC, id DESC;
+
+selectStarred:
+SELECT * FROM CachedMessage WHERE peerId = ? AND starred = 1 AND deletedForEveryone = 0 ORDER BY createdAt DESC;
+
+selectPinned:
+SELECT * FROM CachedMessage WHERE peerId = ? AND pinned = 1 AND deletedForEveryone = 0 ORDER BY createdAt DESC;
+
+clearChat:
+DELETE FROM CachedMessage WHERE peerId = ?;
+
+deletePeer:
+DELETE FROM PeerCache WHERE peerId = ?;
+
+deleteChatSettings:
+DELETE FROM ChatSettingsLocal WHERE peerId = ?;
+
+upsertChatSettings:
+INSERT INTO ChatSettingsLocal(peerId, mutedUntil, disappearingMessagesSeconds, cachedTheme, cachedBubbleColour, cachedPeerScreenshotPolicy, cachedPeerSharePolicy, cachedPeerCopyPolicy, cachedPeerDownloadPolicy, updatedAt)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+ON CONFLICT(peerId) DO UPDATE SET
+    mutedUntil = excluded.mutedUntil,
+    disappearingMessagesSeconds = excluded.disappearingMessagesSeconds,
+    cachedTheme = excluded.cachedTheme,
+    cachedBubbleColour = excluded.cachedBubbleColour,
+    cachedPeerScreenshotPolicy = excluded.cachedPeerScreenshotPolicy,
+    cachedPeerSharePolicy = excluded.cachedPeerSharePolicy,
+    cachedPeerCopyPolicy = excluded.cachedPeerCopyPolicy,
+    cachedPeerDownloadPolicy = excluded.cachedPeerDownloadPolicy,
+    updatedAt = excluded.updatedAt;
+
+selectChatSettings:
+SELECT * FROM ChatSettingsLocal WHERE peerId = ?;
+
+CREATE TABLE ChatDraft (
+    peerId TEXT NOT NULL PRIMARY KEY,
+    draftText TEXT NOT NULL,
+    updatedAt INTEGER NOT NULL
+);
+
+upsertDraft:
+INSERT INTO ChatDraft(peerId, draftText, updatedAt) VALUES (?, ?, ?)
+ON CONFLICT(peerId) DO UPDATE SET draftText = excluded.draftText, updatedAt = excluded.updatedAt;
+
+selectDraft:
+SELECT * FROM ChatDraft WHERE peerId = ?;
+
+selectAllDrafts:
+SELECT * FROM ChatDraft;
+
+deleteDraft:
+DELETE FROM ChatDraft WHERE peerId = ?;

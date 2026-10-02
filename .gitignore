@@ -1,0 +1,35 @@
+# Local credentials and machine-specific configuration
+.env
+**/.env
+.env.*
+**/.env.*
+!*.env.example
+!**/.env.example
+local.properties
+**/local.properties
+gradle.properties
+
+# Firebase client configuration (supply privately for local builds)
+androidApp/google-services.json
+iosApp/GoogleService-Info.plist
+
+# Signing keys and generated release artifacts
+*.jks
+*.keystore
+*.apk
+*.aab
+*.apks
+
+# Gradle, IDE, and platform build output
+.gradle/
+**/.gradle/
+**/build/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Local media and runtime data
+backend/media/
+backend/work/
+backend/quarantine/

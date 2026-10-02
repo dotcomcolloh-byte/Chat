@@ -1,0 +1,6 @@
+-- Migration 2 -> 3: per-conversation message drafts.
+CREATE TABLE ChatDraft (
+    peerId TEXT NOT NULL PRIMARY KEY,
+    draftText TEXT NOT NULL,
+    updatedAt INTEGER NOT NULL
+);

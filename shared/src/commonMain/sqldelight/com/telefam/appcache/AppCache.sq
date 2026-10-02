@@ -1,0 +1,12 @@
+CREATE TABLE AppCache (
+    key TEXT NOT NULL PRIMARY KEY,
+    cachedValue TEXT NOT NULL,
+    updatedAt INTEGER NOT NULL
+);
+
+upsertValue:
+INSERT INTO AppCache(key, cachedValue, updatedAt) VALUES (?, ?, ?)
+ON CONFLICT(key) DO UPDATE SET cachedValue = excluded.cachedValue, updatedAt = excluded.updatedAt;
+
+selectValue:
+SELECT * FROM AppCache WHERE key = ?;

@@ -1,0 +1,32 @@
+<!-- Merge these keys into your generated Info.plist (Xcode -> Info tab -> add rows bound to $(API_BASE_URL)) -->
+<key>API_BASE_URL</key>
+<string>$(API_BASE_URL)</string>
+<key>GIPHY_API_KEY</key>
+<string>$(GIPHY_API_KEY)</string>
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <false/>
+</dict>
+<key>BGTaskSchedulerPermittedIdentifiers</key>
+<array>
+    <string>com.telefam.app.outbox-sync</string>
+</array>
+<key>UIBackgroundModes</key>
+<array>
+    <string>fetch</string>
+    <string>processing</string>
+    <!-- Calls: VoIP pushes (CallKit) + mic keeps running mid-call -->
+    <string>voip</string>
+    <string>audio</string>
+</array>
+<key>NSMicrophoneUsageDescription</key>
+<string>Telefam needs microphone access for voice and video calls and voice messages.</string>
+<!-- Contact discovery: hashes are computed on-device; raw contacts never leave the phone. -->
+<key>NSContactsUsageDescription</key>
+<string>Telefam uses your contacts only to find people you know. Your contacts are hashed on your device and the raw numbers and emails never leave it.</string>
+
+	<key>NSCameraUsageDescription</key>
+	<string>Telefam needs camera access for verification (live selfie and ID scan), for capturing photos and videos, and for scanning QR codes to link devices.</string>
+	<key>NSDocumentCameraUsageDescription</key>
+	<string>Telefam uses document scanning to capture your ID for verification.</string>

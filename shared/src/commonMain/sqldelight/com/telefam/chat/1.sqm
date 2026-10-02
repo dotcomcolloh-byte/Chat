@@ -1,0 +1,12 @@
+-- Migration 1 -> 2: message metadata for reply/edit/reactions/pin/star/delete-for-everyone/remote-media.
+ALTER TABLE CachedMessage ADD COLUMN replyToId TEXT;
+ALTER TABLE CachedMessage ADD COLUMN replyPreview TEXT;
+ALTER TABLE CachedMessage ADD COLUMN replySender TEXT;
+ALTER TABLE CachedMessage ADD COLUMN editedAt INTEGER;
+ALTER TABLE CachedMessage ADD COLUMN pinned INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE CachedMessage ADD COLUMN starred INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE CachedMessage ADD COLUMN deletedForEveryone INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE CachedMessage ADD COLUMN reactions TEXT;
+ALTER TABLE CachedMessage ADD COLUMN forwarded INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE CachedMessage ADD COLUMN mediaRemoteId TEXT;
+ALTER TABLE CachedMessage ADD COLUMN mediaKey TEXT;

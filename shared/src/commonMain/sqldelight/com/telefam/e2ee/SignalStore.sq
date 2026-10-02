@@ -1,0 +1,70 @@
+CREATE TABLE SignalIdentity (
+    remoteAddress TEXT NOT NULL PRIMARY KEY, -- "userId:deviceId"
+    identityPublicKey TEXT NOT NULL,          -- base64
+    trustedAt INTEGER NOT NULL
+);
+
+CREATE TABLE SignalSession (
+    remoteAddress TEXT NOT NULL PRIMARY KEY, -- "userId:deviceId"
+    sessionRecord BLOB NOT NULL               -- SessionRecord.serialize()
+);
+
+CREATE TABLE SignalPreKey (
+    keyId INTEGER NOT NULL PRIMARY KEY,
+    record BLOB NOT NULL                      -- PreKeyRecord.serialize()
+);
+
+CREATE TABLE SignalSignedPreKey (
+    keyId INTEGER NOT NULL PRIMARY KEY,
+    record BLOB NOT NULL                      -- SignedPreKeyRecord.serialize()
+);
+
+CREATE TABLE SignalKyberPreKey (
+    keyId INTEGER NOT NULL PRIMARY KEY,
+    record BLOB NOT NULL                      -- KyberPreKeyRecord.serialize()
+);
+
+upsertIdentity:
+INSERT OR REPLACE INTO SignalIdentity(remoteAddress, identityPublicKey, trustedAt) VALUES (?, ?, ?);
+
+selectIdentity:
+SELECT * FROM SignalIdentity WHERE remoteAddress = ?;
+
+upsertSession:
+INSERT OR REPLACE INTO SignalSession(remoteAddress, sessionRecord) VALUES (?, ?);
+
+selectSession:
+SELECT * FROM SignalSession WHERE remoteAddress = ?;
+
+deleteSession:
+DELETE FROM SignalSession WHERE remoteAddress = ?;
+
+insertPreKey:
+INSERT OR REPLACE INTO SignalPreKey(keyId, record) VALUES (?, ?);
+
+selectPreKey:
+SELECT * FROM SignalPreKey WHERE keyId = ?;
+
+deletePreKey:
+DELETE FROM SignalPreKey WHERE keyId = ?;
+
+insertSignedPreKey:
+INSERT OR REPLACE INTO SignalSignedPreKey(keyId, record) VALUES (?, ?);
+
+selectSignedPreKey:
+SELECT * FROM SignalSignedPreKey WHERE keyId = ?;
+
+selectAllSignedPreKeys:
+SELECT * FROM SignalSignedPreKey;
+
+insertKyberPreKey:
+INSERT OR REPLACE INTO SignalKyberPreKey(keyId, record) VALUES (?, ?);
+
+selectKyberPreKey:
+SELECT * FROM SignalKyberPreKey WHERE keyId = ?;
+
+selectAllKyberPreKeys:
+SELECT * FROM SignalKyberPreKey;
+
+deleteKyberPreKey:
+DELETE FROM SignalKyberPreKey WHERE keyId = ?;

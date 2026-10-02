@@ -1,0 +1,463 @@
+<resources>
+    <string name="app_name">Telefam</string>
+
+    <string name="search_hint">Search chats, people, groups</string>
+    <string name="more_options">More options</string>
+
+    <string name="empty_title">Start a conversation</string>
+    <string name="empty_subtitle">Tap the button below to chat with your friends, family or groups</string>
+    <string name="start_conversation">Start Conversation</string>
+
+    <string name="nav_chats">Chats</string>
+    <string name="nav_contacts">Friends</string>
+    <string name="nav_post">Post</string>
+    <string name="nav_feeds">Feeds</string>
+    <string name="nav_profile">Profile</string>
+
+    <string name="coming_soon">Coming soon</string>
+
+    <string name="menu_privacy">Privacy</string>
+    <string name="menu_message_requests">Message Requests</string>
+    <string name="menu_archived">Archived Chats</string>
+    <string name="menu_blocked">Blocked</string>
+    <string name="menu_linked_devices">Linked Devices</string>
+    <string name="menu_settings">Settings</string>
+    <string name="login_link_device">Link a device instead</string>
+
+    <string name="privacy_title">Privacy</string>
+    <string name="privacy_subtitle">Control who can interact with you and your messages.</string>
+
+    <string name="setting_message_requests_title">Message Requests</string>
+    <string name="setting_message_requests_desc">Set who can send you message requests.</string>
+    <string name="setting_call_title">Who Can Call Me</string>
+    <string name="setting_call_desc">Control who can call you.</string>
+    <string name="setting_screenshot_title">Who Can Screenshot Chats</string>
+    <string name="setting_screenshot_desc">Choose who can take screenshots of your chats.</string>
+    <string name="setting_share_title">Who Can Share Chats</string>
+    <string name="setting_share_desc">Control who can share your chats.</string>
+    <string name="setting_copy_title">Who Can Copy Messages</string>
+    <string name="setting_copy_desc">Control who can copy your messages.</string>
+    <string name="setting_download_title">Who Can Download My Media</string>
+    <string name="setting_download_desc">Control who can download your photos, videos and files.</string>
+    <string name="setting_theme_title">Chats Theme</string>
+    <string name="setting_theme_desc">Choose your chat background theme.</string>
+    <string name="setting_bubble_title">Message Bubbles Colour</string>
+    <string name="setting_bubble_desc">Choose the colour of your message bubbles.</string>
+
+    <string name="save">Save</string>
+    <string name="saved">Saved</string>
+
+    <string name="requests_title">Message Requests</string>
+    <string name="requests_empty">No pending message requests</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+
+    <string name="archived_title">Archived Chats</string>
+    <string name="archived_empty">No archived chats</string>
+    <string name="unarchive">Unarchive</string>
+
+    <string name="blocked_title">Blocked</string>
+    <string name="blocked_empty">No blocked contacts</string>
+    <string name="unblock">Unblock</string>
+
+    <string name="access_anyone">Anyone</string>
+    <string name="access_friends">Friends</string>
+    <string name="access_nobody">Nobody</string>
+
+    <string name="desc_requests_anyone">Anyone can send you message requests.</string>
+    <string name="desc_requests_friends">Only your friends can send you message requests.</string>
+    <string name="desc_requests_nobody">No one can send you message requests.</string>
+
+    <string name="desc_call_anyone">Anyone can call you.</string>
+    <string name="desc_call_friends">Only your friends can call you.</string>
+    <string name="desc_call_nobody">No one can call you.</string>
+
+    <string name="desc_screenshot_anyone">Anyone can take screenshots of your chats.</string>
+    <string name="desc_screenshot_friends">Only your friends can take screenshots of your chats.</string>
+    <string name="desc_screenshot_nobody">No one can take screenshots of your chats.</string>
+
+    <string name="desc_share_anyone">Anyone can share your chats.</string>
+    <string name="desc_share_friends">Only your friends can share your chats.</string>
+    <string name="desc_share_nobody">No one can share your chats.</string>
+
+    <string name="desc_copy_anyone">Anyone can copy your messages.</string>
+    <string name="desc_copy_friends">Only your friends can copy your messages.</string>
+    <string name="desc_copy_nobody">No one can copy your messages.</string>
+
+    <string name="desc_download_anyone">Anyone can download your media.</string>
+    <string name="desc_download_friends">Only your friends can download your media.</string>
+    <string name="desc_download_nobody">No one can download your media.</string>
+
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_blue">Blue</string>
+    <string name="theme_purple">Purple</string>
+    <string name="theme_green">Green</string>
+    <string name="theme_pink">Pink</string>
+
+    <string name="bubble_red">Red</string>
+    <string name="bubble_blue">Blue</string>
+    <string name="bubble_purple">Purple</string>
+    <string name="bubble_green">Green</string>
+    <string name="bubble_orange">Orange</string>
+    <string name="bubble_grey">Grey</string>
+
+    <string name="auth_tagline">Stay connected. Stay together.</string>
+    <string name="or_divider">or</string>
+
+    <string name="signup_title">Sign up</string>
+    <string name="signup_subtitle">Create your account to get started</string>
+    <string name="email_label">Email</string>
+    <string name="email_placeholder">Enter your email</string>
+    <string name="password_label">Password</string>
+    <string name="password_placeholder">Enter your password</string>
+    <string name="already_have_account">Already have an account?</string>
+
+    <string name="login_title">Login</string>
+    <string name="login_subtitle">Welcome back</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="try_again_in">Try again in %s</string>
+
+    <string name="profile_setup_title">Profile Setup</string>
+    <string name="profile_setup_subtitle">Tell us about yourself</string>
+    <string name="upload_profile_photo">Upload Profile Photo</string>
+    <string name="upload_profile_photo_desc">Add a clear photo to help your friends recognize you.</string>
+    <string name="full_name_label">Full Name</string>
+    <string name="full_name_placeholder">Enter your full name</string>
+    <string name="username_label">Username</string>
+    <string name="username_placeholder">Choose a username</string>
+    <string name="phone_number_label">Phone Number</string>
+    <string name="phone_number_placeholder">Enter your phone number</string>
+    <string name="gender_label">Gender</string>
+    <string name="gender_placeholder">Select gender</string>
+    <string name="dob_label">Date of Birth</string>
+    <string name="dob_placeholder">Select date of birth</string>
+    <string name="bio_label">Bio</string>
+    <string name="bio_placeholder">Tell us something about yourself...</string>
+    <string name="search_country">Search country</string>
+    <string name="continue_action">Continue</string>
+
+    <string name="verify_email_title">Verify your email</string>
+    <string name="verify_email_subtitle">Enter the 6-digit code sent to %s</string>
+    <string name="resend_code_in">Resend code in %s</string>
+    <string name="resend_code">Resend code</string>
+    <string name="back">Back</string>
+    <string name="verify_action">Verify</string>
+
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_non_binary">Non-binary</string>
+    <string name="gender_prefer_not_to_say">Prefer not to say</string>
+
+    <string name="menu_view_profile">View Profile</string>
+    <string name="menu_media_links_docs">Media, Links &amp; Docs</string>
+    <string name="menu_mute">Mute</string>
+    <string name="menu_block">Block</string>
+    <string name="menu_unblock">Unblock</string>
+    <string name="menu_report">Report</string>
+    <string name="menu_disappearing_messages">Disappearing Messages</string>
+    <string name="menu_clear_chat">Clear Chat</string>
+    <string name="menu_clear_chat_desc">Remove all messages</string>
+    <string name="menu_report_desc">Report this contact</string>
+    <string name="menu_block_desc">This contact will be blocked</string>
+
+    <string name="mute_title">Mute Notifications</string>
+    <string name="mute_8_hours">For 8 hours</string>
+    <string name="mute_1_week">For 1 week</string>
+    <string name="mute_always">Until I turn it back on</string>
+    <string name="mute_off">Off</string>
+    <string name="unmute">Unmute</string>
+
+    <string name="disappearing_title">Disappearing Messages</string>
+    <string name="disappearing_subtitle">New messages will disappear from this chat for both people after the selected time.</string>
+    <string name="disappearing_off">Off</string>
+    <string name="disappearing_24_hours">24 hours</string>
+    <string name="disappearing_3_days">3 days</string>
+    <string name="disappearing_1_week">1 week</string>
+    <string name="disappearing_1_month">1 month</string>
+
+    <string name="report_title">Report</string>
+    <string name="report_subtitle">Tell us what's wrong. Your report is confidential.</string>
+    <string name="report_reason_placeholder">Describe the issue...</string>
+    <string name="report_submit">Submit Report</string>
+    <string name="report_submitted">Report submitted</string>
+
+    <string name="clear_chat_title">Clear Chat</string>
+    <string name="clear_chat_confirm">This removes all messages in this chat from your device. This can\'t be undone.</string>
+    <string name="clear">Clear</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="media_links_docs_title">Media, Links &amp; Docs</string>
+    <string name="tab_media">Media</string>
+    <string name="tab_links">Links</string>
+    <string name="tab_docs">Docs</string>
+    <string name="sent_by_me">Sent</string>
+    <string name="received">Received</string>
+    <string name="no_media">No media yet</string>
+    <string name="no_links">No links yet</string>
+    <string name="no_docs">No documents yet</string>
+
+    <string name="attach_gallery">Gallery</string>
+    <string name="attach_camera">Camera</string>
+    <string name="attach_document">Document</string>
+    <string name="attach_location">Location</string>
+    <string name="attach_contact">Contact</string>
+    <string name="attach_poll">Poll</string>
+    <string name="attach_audio">Audio</string>
+    <string name="attach_clip">Clip</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_sticker">Sticker</string>
+    <string name="attach_event">Event</string>
+    <string name="attach_more">More</string>
+
+    <string name="poll_title">Create Poll</string>
+    <string name="poll_question_placeholder">Ask a question</string>
+    <string name="poll_option_placeholder">Option %s</string>
+    <string name="poll_add_option">Add option</string>
+    <string name="poll_allow_multiple">Allow multiple answers</string>
+    <string name="poll_send">Send Poll</string>
+    <string name="poll_votes">%s votes</string>
+
+    <string name="contact_pick_title">Send Contact</string>
+    <string name="contact_action_save">Save</string>
+    <string name="contact_action_open">Open</string>
+    <string name="contact_action_call">Call</string>
+
+    <string name="location_pick_title">Send Location</string>
+    <string name="location_current">Use current location</string>
+    <string name="location_search_placeholder">Search a place</string>
+    <string name="location_view_once">Send as view once</string>
+    <string name="location_disappear_after">Disappear after</string>
+    <string name="location_send">Send Location</string>
+    <string name="location_no_permission">Location permission is needed to share your location</string>
+
+    <string name="attachment_sheet_title">Share</string>
+
+    <string name="chat_type_message">Type a message...</string>
+    <string name="chat_online">online</string>
+    <string name="chat_offline">offline</string>
+    <string name="chat_today">Today</string>
+    <string name="chat_yesterday">Yesterday</string>
+    <string name="chat_call_coming_soon">Calls are coming soon</string>
+    <string name="chat_feature_coming_soon">Coming soon</string>
+    <string name="chat_load_more">Loading earlier messages…</string>
+    <string name="chat_restricted_copy">Copying is disabled for this chat</string>
+    <string name="chat_restricted_download">Downloading is disabled for this chat</string>
+    <string name="chat_restricted_share">Forwarding is disabled for this chat</string>
+    <string name="chat_photo">Photo</string>
+    <string name="chat_view_once">View once</string>
+    <string name="chat_opened">Opened</string>
+
+    <string name="voice_cancel">Cancel recording</string>
+    <string name="voice_stop">Stop recording</string>
+    <string name="voice_delete">Delete voice note</string>
+    <string name="voice_send">Send voice note</string>
+    <string name="view_once">View once</string>
+    <string name="voice_mic_unavailable">Microphone unavailable. Check permission.</string>
+
+    <string name="chat_menu_copy">Copy</string>
+    <string name="chat_menu_forward">Forward</string>
+    <string name="chat_menu_delete">Delete for me</string>
+
+    <string name="chat_flag_me_copy">You tried to copy a protected message</string>
+    <string name="chat_flag_me_forward">You tried to forward a protected message</string>
+    <string name="chat_flag_me_download">You tried to download protected media</string>
+    <string name="chat_flag_peer_copy">%s tried to copy a protected message</string>
+    <string name="chat_flag_peer_forward">%s tried to forward a protected message</string>
+    <string name="chat_flag_peer_download">%s tried to download protected media</string>
+
+    <string name="new_chat_title">New Chat</string>
+    <string name="new_chat_search_placeholder">Search by username</string>
+    <string name="new_chat_hint">Type at least 3 letters of a username</string>
+    <string name="new_chat_no_results">No people found</string>
+    <string name="conv_preview_photo">Photo</string>
+    <string name="conv_preview_voice">Voice note</string>
+    <string name="conv_preview_video">Video</string>
+    <string name="conv_preview_poll">Poll</string>
+    <string name="conv_preview_contact">Contact</string>
+    <string name="conv_preview_location">Location</string>
+    <string name="conv_preview_file">Document</string>
+    <string name="conv_you_prefix">You: %s</string>
+    <string name="conv_no_messages">Say hello</string>
+    <string name="chat_menu_reply">Reply</string>
+    <string name="chat_menu_edit">Edit</string>
+    <string name="chat_menu_pin">Pin</string>
+    <string name="chat_menu_unpin">Unpin</string>
+    <string name="chat_menu_star">Star</string>
+    <string name="chat_menu_unstar">Unstar</string>
+    <string name="chat_menu_delete_everyone">Delete for everyone</string>
+    <string name="chat_menu_delete_me">Delete for me</string>
+    <string name="chat_message_deleted">This message was deleted</string>
+    <string name="chat_edited">edited</string>
+    <string name="chat_forwarded">Forwarded</string>
+    <string name="chat_replying_to">Replying to</string>
+    <string name="chat_editing_message">Edit message</string>
+    <string name="chat_search_in_chat">Search in chat</string>
+    <string name="chat_starred_filter">Starred</string>
+    <string name="chat_typing">typing…</string>
+    <string name="chat_last_seen">last seen</string>
+    <string name="chat_you">You</string>
+    <string name="chat_pinned">Pinned message</string>
+    <string name="event_composer_title">Create event</string>
+    <string name="event_title_label">Title</string>
+    <string name="event_date_label">Date (YYYY-MM-DD)</string>
+    <string name="event_time_label">Time (HH:MM)</string>
+    <string name="event_location_label">Location (optional)</string>
+    <string name="event_notes_label">Notes (optional)</string>
+    <string name="event_send">Send event</string>
+    <string name="event_invalid">Enter a title and a valid date/time</string>
+    <string name="giphy_search_hint">Search GIPHY</string>
+    <string name="giphy_preview_send">Send</string>
+    <string name="giphy_empty">No results</string>
+    <string name="giphy_attribution">Powered by GIPHY</string>
+    <string name="forward_title">Forward to…</string>
+    <string name="forward_send">Send</string>
+    <string name="media_download_retry">Tap to download</string>
+    <string name="picker_cancelled">No file selected</string>
+
+    <!-- Smart message entities -->
+    <string name="action_copy">Copy</string>
+    <string name="action_call">Call</string>
+    <string name="action_save_contact">Save to contacts</string>
+    <string name="action_send_email">Send email</string>
+    <string name="action_share">Share</string>
+    <string name="action_open_link">Open link</string>
+    <string name="otp_detected_label">Verification code</string>
+    <string name="otp_copied">Code copied</string>
+    <string name="browser_close">Close</string>
+    <string name="browser_back">Back</string>
+    <string name="browser_forward">Forward</string>
+    <string name="browser_refresh">Refresh</string>
+    <string name="browser_loading">Loading…</string>
+    <string name="conv_draft_prefix">Draft: </string>
+    <string name="file_unavailable">This file is not available on this device</string>
+    <string name="file_open_failed">No app found that can open this file</string>
+    <string name="mention_loading">Loading profile…</string>
+    <string name="mention_not_found">No Telefam user with the username @%1$s</string>
+    <string name="mention_load_failed">Couldn\'t load this profile. Check your connection and try again.</string>
+    <string name="mention_send_message">Send message</string>
+    <string name="privacy_last_seen_title">Who Can See My Last Seen</string>
+    <string name="privacy_last_seen_desc">Control who can see when you are online and when you were last active.</string>
+    <string name="desc_last_seen_anyone">Anyone can see when you are online and your last seen.</string>
+    <string name="desc_last_seen_friends">Only people you have accepted chats with can see when you are online.</string>
+    <string name="desc_last_seen_nobody">Nobody can see when you are online or your last seen.</string>
+    <string name="presence_online">online</string>
+    <string name="presence_last_seen_just_now">last seen just now</string>
+    <string name="presence_last_seen_minutes">last seen %1$d min ago</string>
+    <string name="presence_last_seen_hours">last seen %1$d h ago</string>
+    <string name="presence_last_seen_yesterday">last seen yesterday</string>
+    <string name="presence_last_seen_days">last seen %1$d days ago</string>
+
+    <!-- Feeds -->
+    <string name="feed_for_you">For You</string>
+    <string name="feed_friends">Friends</string>
+    <string name="feed_following">Following</string>
+    <string name="feed_new_creators">New creators</string>
+    <string name="feed_search">Search</string>
+    <string name="feed_search_hint">Search videos, #hashtags</string>
+    <string name="feed_search_empty">Search for videos and hashtags</string>
+    <string name="feed_search_no_results">No results found</string>
+    <string name="feed_like">Like</string>
+    <string name="feed_comments">Comments</string>
+    <string name="feed_reshare">Reshare</string>
+    <string name="feed_save">Save</string>
+    <string name="feed_follow">Follow</string>
+    <string name="feed_read_more">Read more</string>
+    <string name="feed_read_less">Read less</string>
+    <string name="feed_original_sound">Original sound</string>
+    <string name="feed_share">Share</string>
+    <string name="feed_share_to_chats">Share to chats</string>
+    <string name="feed_share_no_chats">No conversations yet — start one from Home</string>
+    <string name="feed_share_text">Check out this post on Telefam:</string>
+    <string name="feed_download">Download</string>
+    <string name="feed_download_started">Downloading video…</string>
+    <string name="feed_download_done">Saved to your device</string>
+    <string name="feed_download_failed">Download failed</string>
+    <string name="feed_report">Report</string>
+    <string name="feed_report_title">Report post</string>
+    <string name="feed_report_subtitle">Tell us what&#8217;s wrong with this post.</string>
+    <string name="feed_report_details_hint">Add details (optional)</string>
+    <string name="feed_report_submit">Submit report</string>
+    <string name="feed_report_thanks">Thanks — our team will review this post.</string>
+    <string name="feed_report_failed">Couldn&#8217;t send the report. Try again.</string>
+    <string name="feed_block_user">Block @%1$s</string>
+    <string name="feed_not_interested">Not interested</string>
+    <string name="feed_edit_post">Edit post</string>
+    <string name="feed_edit_title">Edit post</string>
+    <string name="feed_edit_description">Description</string>
+    <string name="feed_edit_hashtags">Hashtags</string>
+    <string name="feed_edit_hashtags_hint">Separate with spaces, e.g. #travel #city</string>
+    <string name="feed_edit_commenting">Who can comment</string>
+    <string name="feed_edit_privacy">Who can see this post</string>
+    <string name="feed_edit_embed">Allow embedding</string>
+    <string name="feed_edit_save">Save changes</string>
+    <string name="feed_edit_save_failed">Couldn&#8217;t save changes. Try again.</string>
+    <string name="feed_delete_post">Delete post</string>
+    <string name="feed_delete_confirm_title">Delete this post?</string>
+    <string name="feed_delete_confirm_message">The video and all its engagement will be permanently removed.</string>
+    <string name="feed_delete_failed">Couldn&#8217;t delete the post. Try again.</string>
+    <string name="feed_restrict_downloads">Restrict downloads</string>
+    <string name="feed_restrict_downloads_desc">When on, other people won&#8217;t see a Download option for this post.</string>
+    <string name="feed_sent_to_chat">Sent to chat</string>
+    <string name="feed_no_internet_banner">No internet connection — showing cached videos. Feeds will refresh when you&#8217;re back online.</string>
+    <string name="feed_no_internet_empty">No internet connection</string>
+    <string name="feed_no_internet_video">Offline — this video isn&#8217;t cached yet</string>
+    <string name="feed_load_failed">Couldn&#8217;t load the feed. Pull back and try again.</string>
+    <string name="feed_video_unavailable">This video is unavailable</string>
+    <string name="feed_empty">No posts yet</string>
+
+    <!-- Contacts / Discover -->
+    <string name="contacts_search_hint">Search people</string>
+    <string name="contacts_filter">Filter</string>
+    <string name="contacts_suggestions_title">People you may know</string>
+    <string name="contacts_search_results_title">Search results</string>
+    <string name="contacts_mutual">%1$d mutual connections</string>
+    <string name="contacts_from_contacts">From your contacts</string>
+    <string name="contacts_friend_of_friend">Friend of friends</string>
+    <string name="contacts_nearby">Near you</string>
+    <string name="contacts_new_user">New on Telefam</string>
+    <string name="contacts_sync_hint">Sync your contacts to find people you know</string>
+    <string name="contacts_sync_action">Sync contacts</string>
+    <string name="contacts_empty">No suggestions right now — check back tomorrow</string>
+    <string name="contacts_search_empty">No people found</string>
+    <string name="contacts_related_title">Related</string>
+    <string name="follow">Follow</string>
+    <string name="follow_back">Follow back</string>
+    <string name="following_label">Following</string>
+    <string name="friends_label">Friends</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="offline_cached">You&#8217;re offline — showing saved results. We&#8217;ll refresh when you&#8217;re back.</string>
+    <string name="retry">Retry</string>
+    <string name="follow_rate_limited">You&#8217;re following too fast — try again shortly.</string>
+
+    <!-- Profile -->
+    <string name="profile_followers">Followers</string>
+    <string name="profile_following">Following</string>
+    <string name="profile_likes">Likes</string>
+    <string name="profile_friends">Friends</string>
+    <string name="profile_message">Message</string>
+    <string name="profile_subscribe">Subscribe</string>
+    <string name="profile_subscribe_coming">Subscriptions are coming soon</string>
+    <string name="profile_posts">Posts</string>
+    <string name="profile_all_posts">All posts</string>
+    <string name="profile_no_posts">No posts yet</string>
+    <string name="profile_not_found">This profile isn&#8217;t available</string>
+    <string name="profile_blocked_notice">You blocked this user</string>
+    <string name="profile_block">Block</string>
+    <string name="profile_unblock">Unblock</string>
+    <string name="profile_block_confirm_title">Block %1$s?</string>
+    <string name="profile_block_confirm_message">They won&#8217;t be able to message you or see your posts.</string>
+    <string name="profile_report">Report</string>
+    <string name="profile_report_title">Report user</string>
+    <string name="profile_report_subtitle">Tell us what&#8217;s wrong with this account.</string>
+    <string name="profile_report_thanks">Thanks — our team will review this account.</string>
+    <string name="profile_copy_url">Copy profile link</string>
+    <string name="profile_share">Share profile</string>
+    <string name="profile_posts_load_failed">Couldn&#8217;t load posts</string>
+    <string name="profile_url_copied">Profile link copied</string>
+    <string name="profile_unfollow_confirm_title">Unfollow %1$s?</string>
+    <string name="profile_view_photo">View profile photo</string>
+    <string name="list_empty">Nobody here yet</string>
+</resources>
