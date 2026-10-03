@@ -55,3 +55,29 @@ dependencies {
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation(kotlin("test"))
 }
+
+// ---------------------------------------------------------------------------------------------
+// Tests. Pure unit tests always run. Integration tests need a real Postgres and are skipped
+// (not failed) when none is reachable:
+//   docker run -d --name telefam-test-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=telefam_test -p 5432:5432 postgres:16
+//   gradle test
+// Override with TEST_DATABASE_URL / TEST_DATABASE_USER / TEST_DATABASE_PASSWORD.
+// ---------------------------------------------------------------------------------------------
+tasks.test {
+    useJUnitPlatform()
+    testLogging { events("passed", "skipped", "failed"); showStandardStreams = false }
+    environment(
+        mapOf(
+            "DATABASE_URL" to (System.getenv("TEST_DATABASE_URL") ?: "jdbc:postgresql://localhost:5432/telefam_test"),
+            "DATABASE_USER" to (System.getenv("TEST_DATABASE_USER") ?: "postgres"),
+            "DATABASE_PASSWORD" to (System.getenv("TEST_DATABASE_PASSWORD") ?: "postgres"),
+            "JWT_ACCESS_SECRET" to "test-access-secret-0123456789-0123456789-0123456789",
+            "JWT_REFRESH_SECRET" to "test-refresh-secret-0123456789-0123456789-0123456789",
+            "GOOGLE_CLIENT_ID_WEB" to "test-web.apps.googleusercontent.com",
+            "GOOGLE_CLIENT_ID_ANDROID" to "test-android.apps.googleusercontent.com",
+            "APPLE_CLIENT_ID" to "com.telefam.app",
+            "RESEND_API_KEY" to "re_test_not_used",
+            "RESEND_FROM_ADDRESS" to "Telefam <test@example.com>"
+        )
+    )
+}

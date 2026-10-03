@@ -61,7 +61,7 @@ object OfficialAccountService {
         } else {
             val uid = UUID.randomUUID()
             // Random unguessable password — this account is backend-controlled only.
-            val randomSecret = ByteArray(64).also { SecureRandom().nextBytes(it) }
+            val randomSecret = ByteArray(32).also { SecureRandom().nextBytes(it) }
                 .joinToString("") { "%02x".format(it) }
             dbQuery {
                 Users.insert {

@@ -68,6 +68,12 @@ fun Route.authRoutes(
                     val req = call.receive<OtpVerifyRequestDto>()
                     val purpose = OtpPurpose.entries.find { it.name == req.purpose }
                         ?: return@post call.respond(HttpStatusCode.BadRequest, ApiError("Invalid request"))
+                    // Only sign-in style codes may mint tokens here. Password-reset codes must go through
+                    // /password/reset (which sets the new password); email-change / payout codes are
+                    // consumed by their own authenticated routes.
+                    if (purpose != OtpPurpose.SIGNUP_VERIFY && purpose != OtpPurpose.LOGIN_2FA) {
+                        return@post call.respond(HttpStatusCode.BadRequest, ApiError("Invalid request"))
+                    }
                     if (!Validators.isValidOtpCode(req.code)) {
                         return@post call.respond(HttpStatusCode.BadRequest, ApiError("Invalid code"))
                     }

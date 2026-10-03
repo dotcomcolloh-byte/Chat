@@ -20,9 +20,11 @@ iosApp/GoogleService-Info.plist
 *.aab
 *.apks
 
-# Gradle, IDE, and platform build output
+# Gradle, Kotlin, IDE, and platform build output
 .gradle/
 **/.gradle/
+.kotlin/
+**/.kotlin/
 **/build/
 .idea/
 *.iml

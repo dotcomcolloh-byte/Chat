@@ -79,6 +79,7 @@ import com.telefam.ui.components.ConfirmDialog
 import com.telefam.ui.theme.TelefamTheme
 import io.ktor.client.call.body
 import io.ktor.client.request.post
+import io.ktor.client.statement.bodyAsText
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
@@ -89,6 +90,7 @@ import java.util.UUID
 private sealed class Screen {    object SignUp : Screen()
     object Login : Screen()
     data class Otp(val email: String, val purpose: String) : Screen()
+    data class ResetPassword(val email: String) : Screen()
     object ProfileSetup : Screen()
     object Home : Screen()
     object Privacy : Screen()
@@ -628,6 +630,7 @@ class MainActivity : ComponentActivity() {
                         enabled = screen !is Screen.SignUp &&
                             screen !is Screen.Login &&
                             screen !is Screen.Otp &&
+                            screen !is Screen.ResetPassword &&
                             screen !is Screen.ProfileSetup
                     ) {
                         screen = when (val current = screen) {
@@ -729,6 +732,7 @@ class MainActivity : ComponentActivity() {
                             is Screen.SignUp,
                             is Screen.Login,
                             is Screen.Otp,
+                            is Screen.ResetPassword,
                             Screen.ProfileSetup -> current
                         }
                     }
@@ -887,7 +891,9 @@ class MainActivity : ComponentActivity() {
                                 onSignUpClick = { email, password ->
                                     error = null; isLoading = true
                                     lifecycleScope.launch {
-                                        val response = authApi.signUp(email, password)
+                                        val response = try { authApi.signUp(email, password) } catch (e: Exception) {
+                                            isLoading = false; error = "Can't reach the server. Check your connection."; return@launch
+                                        }
                                         isLoading = false
                                         if (response.status.value in 200..299) screen = Screen.Otp(email, "SIGNUP_VERIFY")
                                         else error = "Unable to create account"
@@ -916,8 +922,8 @@ class MainActivity : ComponentActivity() {
                                     if (email.isNotBlank()) {
                                         error = null
                                         lifecycleScope.launch {
-                                            runCatching { authApi.sendOtp(email, "PASSWORD_RESET") }
-                                            screen = Screen.Otp(email, "PASSWORD_RESET")
+                                            runCatching { authApi.forgotPassword(email) }
+                                            screen = Screen.ResetPassword(email)
                                         }
                                     } else error = "Enter your email address first"
                                 },
@@ -930,10 +936,17 @@ class MainActivity : ComponentActivity() {
                                 onLoginClick = { email, password ->
                                     error = null; isLoading = true
                                     lifecycleScope.launch {
-                                        val response = authApi.login(email, password)
+                                        val response = try { authApi.login(email, password) } catch (e: Exception) {
+                                            isLoading = false; error = "Can't reach the server. Check your connection."; return@launch
+                                        }
                                         isLoading = false
+                                        if (response.status.value == 429) { error = "Too many attempts. Try again later."; return@launch }
                                         if (response.status.value in 200..299) {
-                                            val tokens: AuthTokens = response.body()
+                                            // Accounts with two-factor on get a challenge (and an emailed code) instead of tokens.
+                                            val raw = response.bodyAsText()
+                                            if (raw.contains("\"twoFactorRequired\"")) { screen = Screen.Otp(email, "LOGIN_2FA"); return@launch }
+                                            val tokens: AuthTokens = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
+                                                .decodeFromString(AuthTokens.serializer(), raw)
                                             AuthSession.accessToken = tokens.accessToken
                                             AuthSession.refreshToken = tokens.refreshToken
                                             currentUserIdField = userIdFromAccessToken(tokens.accessToken)
@@ -964,8 +977,8 @@ class MainActivity : ComponentActivity() {
                                     if (email.isNotBlank()) {
                                         error = null
                                         lifecycleScope.launch {
-                                            runCatching { authApi.sendOtp(email, "PASSWORD_RESET") }
-                                            screen = Screen.Otp(email, "PASSWORD_RESET")
+                                            runCatching { authApi.forgotPassword(email) }
+                                            screen = Screen.ResetPassword(email)
                                         }
                                     } else error = "Enter your email address first"
                                 },
@@ -980,8 +993,11 @@ class MainActivity : ComponentActivity() {
                                 onVerifyClick = { code ->
                                     error = null; isLoading = true
                                     lifecycleScope.launch {
-                                        val response = authApi.verifyOtp(s.email, s.purpose, code)
+                                        val response = try { authApi.verifyOtp(s.email, s.purpose, code) } catch (e: Exception) {
+                                            isLoading = false; error = "Can't reach the server. Check your connection."; return@launch
+                                        }
                                         isLoading = false
+                                        if (response.status.value == 429) { error = "Too many attempts. Try again later."; return@launch }
                                         if (response.status.value in 200..299) {
                                             val tokens: AuthTokens = response.body()
                                             AuthSession.accessToken = tokens.accessToken
@@ -989,13 +1005,35 @@ class MainActivity : ComponentActivity() {
                                             currentUserIdField = userIdFromAccessToken(tokens.accessToken)
                                             lifecycleScope.launch { runCatching { messageRepository.registerThisDevice() } }
                                             refreshBlockedIds()
-                                            // Password-reset / 2FA codes sign into an existing account; signup codes need profile setup.
+                                            // 2FA codes sign into an existing account; signup codes need profile setup.
                                             screen = if (s.purpose == "SIGNUP_VERIFY") Screen.ProfileSetup else Screen.Home
                                         } else error = "Invalid code"
                                     }
                                 },
                                 onResendClick = { lifecycleScope.launch { authApi.sendOtp(s.email, s.purpose) } },
-                                onBackClick = { screen = Screen.SignUp }
+                                onBackClick = { screen = if (s.purpose == "LOGIN_2FA") Screen.Login else Screen.SignUp }
+                            )
+
+                            is Screen.ResetPassword -> ResetPasswordScreen(
+                                email = s.email,
+                                isLoading = isLoading,
+                                errorMessage = error,
+                                onSubmit = { code, newPassword ->
+                                    error = null; isLoading = true
+                                    lifecycleScope.launch {
+                                        val response = try { authApi.resetPassword(s.email, code, newPassword) } catch (e: Exception) {
+                                            isLoading = false; error = "Can't reach the server. Check your connection."; return@launch
+                                        }
+                                        isLoading = false
+                                        when {
+                                            response.status.value in 200..299 -> { error = null; screen = Screen.Login }
+                                            response.status.value == 429 -> error = "Too many attempts. Try again later."
+                                            else -> error = "Invalid or expired code"
+                                        }
+                                    }
+                                },
+                                onResend = { lifecycleScope.launch { runCatching { authApi.forgotPassword(s.email) } } },
+                                onBack = { error = null; screen = Screen.Login }
                             )
 
                             is Screen.ProfileSetup -> {

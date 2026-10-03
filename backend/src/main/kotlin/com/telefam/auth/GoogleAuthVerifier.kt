@@ -20,14 +20,17 @@ class GoogleAuthVerifier {
         .setAudience(Collections.singletonList(AppConfig.googleClientIdWeb))
         .build()
 
-    fun verify(idTokenString: String): GoogleIdentity? {
-        val idToken: GoogleIdToken = verifier.verify(idTokenString) ?: return null
-        val payload = idToken.payload
-        return GoogleIdentity(
-            sub = payload.subject,
-            email = payload.email,
-            emailVerified = payload.emailVerified ?: false,
-            name = payload["name"] as? String
-        )
+    fun verify(idTokenString: String): GoogleIdentity? = try {
+        val idToken: GoogleIdToken? = verifier.verify(idTokenString)
+        idToken?.payload?.let { payload ->
+            GoogleIdentity(
+                sub = payload.subject,
+                email = payload.email,
+                emailVerified = payload.emailVerified ?: false,
+                name = payload["name"] as? String
+            )
+        }
+    } catch (e: Exception) {
+        null // malformed / unverifiable token -> caller answers 401, never 500
     }
 }

@@ -24,6 +24,10 @@ expect object ApiConfig {
 @Serializable data class RefreshBody(val refreshToken: String)
 @Serializable data class AuthTokens(val accessToken: String, val refreshToken: String)
 @Serializable data class CooldownResponse(val secondsRemaining: Long)
+@Serializable data class ForgotPasswordBody(val email: String)
+@Serializable data class ResetPasswordBody(val email: String, val code: String, val newPassword: String)
+/** Returned by POST /api/auth/login (HTTP 200) when the account needs the email-OTP second factor. */
+@Serializable data class TwoFactorRequired(val twoFactorRequired: Boolean, val secondsUntilNextResend: Long = 60)
 
 class AuthApi(private val client: HttpClient) {
 
@@ -62,5 +66,17 @@ class AuthApi(private val client: HttpClient) {
     suspend fun refresh(refreshToken: String) =
         client.post("${ApiConfig.baseUrl}/api/auth/refresh") {
             contentType(ContentType.Application.Json); setBody(RefreshBody(refreshToken))
+        }
+
+    /** Starts a password reset. Always 200 server-side, whether or not the email has an account. */
+    suspend fun forgotPassword(email: String) =
+        client.post("${ApiConfig.baseUrl}/api/auth/password/forgot") {
+            contentType(ContentType.Application.Json); setBody(ForgotPasswordBody(email))
+        }
+
+    /** Completes a reset with the emailed code. Does NOT sign the user in — they log in with the new password. */
+    suspend fun resetPassword(email: String, code: String, newPassword: String) =
+        client.post("${ApiConfig.baseUrl}/api/auth/password/reset") {
+            contentType(ContentType.Application.Json); setBody(ResetPasswordBody(email, code, newPassword))
         }
 }
